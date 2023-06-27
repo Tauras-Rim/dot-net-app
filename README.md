@@ -1,2 +1,2 @@
 # dot-net-app
-A personla project to improve my skills
+A personal .NET project to improve my skills

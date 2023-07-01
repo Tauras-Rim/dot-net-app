@@ -1,10 +1,11 @@
 ﻿using dot_net_example.Models;
+using dot_net_example.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace dot_net_example.Services
+namespace dot_net_example.Services.Classes
 {
-    public class GetService : ControllerBase, IGetService
+    public class GetService : IGetService
     {
         private readonly CustomerContext _customerContext;
 
@@ -17,13 +18,13 @@ namespace dot_net_example.Services
         {
             if (_customerContext.Customers == null)
             {
-                return NotFound();
+                return new Customer();
             }
             var customer = await _customerContext.Customers.FindAsync(id);
 
             if (customer == null)
             {
-                return NotFound();
+                return new Customer();
             }
 
             return customer;
@@ -33,7 +34,7 @@ namespace dot_net_example.Services
         {
             if (_customerContext.Customers == null)
             {
-                return NotFound();
+                return new List<Customer>();
             }
             return await _customerContext.Customers.ToListAsync(); ;
         }

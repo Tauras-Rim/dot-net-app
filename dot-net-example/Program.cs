@@ -33,7 +33,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using dot_net_example.Models;
-using dot_net_example.Services;
+using dot_net_example.Services.Classes;
 
 var builder = WebApplication.CreateBuilder(args);
 

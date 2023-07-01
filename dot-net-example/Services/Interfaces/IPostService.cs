@@ -1,10 +1,10 @@
 ﻿using dot_net_example.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace dot_net_example.Services
+namespace dot_net_example.Services.Interfaces
 {
     public interface IPostService
     {
-        public Task<ActionResult<Customer>> PostCustomer(Customer customer);
+        public Task<bool> PostCustomer(Customer customer);
     }
 }

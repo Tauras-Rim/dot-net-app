@@ -1,10 +1,11 @@
 ﻿using dot_net_example.Models;
+using dot_net_example.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace dot_net_example.Services
+namespace dot_net_example.Services.Classes
 {
-    public class UpdateService : ControllerBase, IUpdateService
+    public class UpdateService : IUpdateService
     {
         private readonly CustomerContext _customerContext;
 
@@ -13,11 +14,11 @@ namespace dot_net_example.Services
             _customerContext = customerContext;
         }
 
-        public async Task<IActionResult> PutCustomer(long id, Customer customer)
+        public async Task<bool> PutCustomer(long id, Customer customer)
         {
             if (id != customer.Id)
             {
-                return BadRequest();
+                return false;
             }
 
             _customerContext.Entry(customer).State = EntityState.Modified;
@@ -30,7 +31,7 @@ namespace dot_net_example.Services
             {
                 if (!CustomerExists(id))
                 {
-                    return NotFound();
+                    return false;
                 }
                 else
                 {
@@ -38,7 +39,7 @@ namespace dot_net_example.Services
                 }
             }
 
-            return NoContent();
+            return true;
         }
 
         private bool CustomerExists(long id)

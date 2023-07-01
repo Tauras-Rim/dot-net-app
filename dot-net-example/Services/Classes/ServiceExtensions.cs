@@ -1,6 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using dot_net_example.Services.Interfaces;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace dot_net_example.Services
+namespace dot_net_example.Services.Classes
 {
     public static class ServiceExtensions
     {

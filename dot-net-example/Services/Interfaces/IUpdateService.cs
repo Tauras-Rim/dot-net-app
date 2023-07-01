@@ -1,10 +1,10 @@
 ﻿using dot_net_example.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace dot_net_example.Services
+namespace dot_net_example.Services.Interfaces
 {
     public interface IUpdateService
     {
-        public Task<IActionResult> PutCustomer(long id, Customer customer);
+        public Task<bool> PutCustomer(long id, Customer customer);
     }
 }

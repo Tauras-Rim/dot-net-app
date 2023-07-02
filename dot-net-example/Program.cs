@@ -50,10 +50,11 @@ builder.Services.AddDbContext<CustomerContext>(opt =>
 //builder.Services.AddScoped<IGetService, GetService>();
 //builder.Services.AddScoped<IPostService, PostService>();
 
-builder.Services.AddGetService();
-builder.Services.AddPostService();
-builder.Services.AddDeleteService();
-builder.Services.AddUpdateService();
+//builder.Services.AddGetService();
+//builder.Services.AddPostService();
+//builder.Services.AddDeleteService();
+//builder.Services.AddUpdateService();
+builder.Services.AddCustomerService();
 
 var app = builder.Build();
 

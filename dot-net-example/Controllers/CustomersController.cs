@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using dot_net_example.Models;
 using dot_net_example.Services.Interfaces;
 
@@ -9,33 +8,25 @@ namespace dot_net_example.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly CustomerContext _context;
-        private readonly IDeleteService _deleteService;
-        private readonly IGetService _getService;
-        private readonly IPostService _postService;
-        private readonly IUpdateService _updateService;
+        private readonly ICustomerService _customerService;
 
-        public CustomersController(CustomerContext context, IDeleteService deleteService, IGetService getService, IPostService postService, IUpdateService updateService)
+        public CustomersController(ICustomerService customerService)
         {
-            _context = context;
-            _deleteService = deleteService;
-            _getService = getService;
-            _postService = postService;
-            _updateService = updateService;
+            _customerService = customerService;
         }
 
         // //GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            return await _getService.GetCustomers();
+            return await _customerService.GetCustomers();
         }
 
         // //GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(long id)
         {
-             return await _getService.GetCustomer(id);
+             return await _customerService.GetCustomer(id);
         }
 
         // PUT: api/Customers/5
@@ -43,7 +34,7 @@ namespace dot_net_example.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(long id, Customer customer)
         {
-            return await _updateService.PutCustomer(id, customer) ? Ok("Customer with id " + id + " updated") : NotFound();
+            return await _customerService.PutCustomer(id, customer) ? Ok("Customer with id " + id + " updated") : NotFound();
         }
 
         // // POST: api/Customers
@@ -51,19 +42,14 @@ namespace dot_net_example.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            return await _postService.PostCustomer(customer) ? Ok("Customer created") : Problem("Invalid customer");
+            return await _customerService.PostCustomer(customer) ? Ok("Customer created") : Problem("Invalid customer");
         }
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(long id)
         {
-            return await _deleteService.DeleteCustomer(id) ? Ok("Customer with id " + id + " deleted") : NotFound();
+            return await _customerService.DeleteCustomer(id) ? Ok("Customer with id " + id + " deleted") : NotFound();
         }
-
-        //private bool CustomerExists(long id)
-        //{
-        //    return (_context.Customers?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
     }
 }

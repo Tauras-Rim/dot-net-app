@@ -5,14 +5,14 @@ namespace dot_net_example.Services.Interfaces
 {
     public interface ICustomerService
     {
-        public Task<bool> DeleteCustomer(long id);
+        public void DeleteCustomer(long id);
 
-        public Task<ActionResult<IEnumerable<Customer>>> GetCustomers();
+        public ActionResult<IEnumerable<Customer>> GetCustomers();
 
-        public Task<ActionResult<Customer>> GetCustomer(long id);
+        public ActionResult<Customer> GetCustomer(long id);
 
-        public Task<bool> PostCustomer(Customer customer);
+        public void PostCustomer(Customer customer);
 
-        public Task<bool> PutCustomer(long id, Customer customer);
+        public void PutCustomer(long id, Customer customer);
     }
 }

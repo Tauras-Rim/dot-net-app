@@ -7,7 +7,6 @@ namespace dot_net_example.Services.Classes
 {
     public class CustomerService : ICustomerService
     {
-
         private readonly CustomerContext _customerContext;
 
         public CustomerService(CustomerContext customerContext)
@@ -15,93 +14,77 @@ namespace dot_net_example.Services.Classes
             _customerContext = customerContext;
         }
 
-        public async Task<bool> DeleteCustomer(long id)
+        public void DeleteCustomer(long id)
         {
-            if (_customerContext.Customers == null)
-            {
-                return false;
-            }
-            var customer = await _customerContext.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return false;
-            }
+            CheckIfCustomerListExists();
+
+            var customer = _customerContext.Customers.Find(id);
+
+            CheckIfCustomerExists(customer, id);
 
             _customerContext.Customers.Remove(customer);
-            await _customerContext.SaveChangesAsync();
-
-            return true;
+            _customerContext.SaveChanges();
         }
 
-        public async Task<ActionResult<Customer>> GetCustomer(long id)
+        public ActionResult<Customer> GetCustomer(long id)
         {
-            if (_customerContext.Customers == null)
-            {
-                return new Customer();
-            }
-            var customer = await _customerContext.Customers.FindAsync(id);
+            CheckIfCustomerListExists();
 
-            if (customer == null)
-            {
-                return new Customer();
-            }
+            var customer = _customerContext.Customers.Find(id);
+
+            CheckIfCustomerExists(customer, id);
 
             return customer;
         }
 
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            if (_customerContext.Customers == null)
-            {
-                return new List<Customer>();
-            }
-            return await _customerContext.Customers.ToListAsync(); ;
+            CheckIfCustomerListExists();
+
+            return _customerContext.Customers.ToList(); ;
         }
 
-        public async Task<bool> PostCustomer(Customer customer)
+        public  void PostCustomer(Customer customer)
         {
-            if (_customerContext.Customers == null)
-            {
-                return false;
-            }
+            CheckIfCustomerListExists();
+
             _customerContext.Customers.Add(customer);
-            await _customerContext.SaveChangesAsync();
-
-            return true;
+            _customerContext.SaveChanges();
         }
 
-        public async Task<bool> PutCustomer(long id, Customer customer)
+        public void PutCustomer(long id, Customer customer)
         {
+            CheckIfCustomerListExists();
+
             if (id != customer.Id)
             {
-                return false;
+                throw new ArgumentException("Incorrect customer id");
             }
 
             _customerContext.Entry(customer).State = EntityState.Modified;
 
-            try
-            {
-                await _customerContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
-                {
-                    return false;
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _customerContext.SaveChanges();
+        }
 
-            return true;
+        private void CheckIfCustomerListExists()
+        {
+            if (_customerContext.Customers == null)
+            {
+                throw new InvalidOperationException("Customer list does't exist");
+            }
+        }
+
+        private void CheckIfCustomerExists(Customer customer, long id)
+        {
+            if (customer == null)
+            {
+                throw new ArgumentException("Customer with id" + id + " doesn't exist");
+            }
         }
 
         private bool CustomerExists(long id)
         {
             return (_customerContext.Customers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
     }
 }

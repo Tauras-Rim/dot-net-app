@@ -17,39 +17,89 @@ namespace dot_net_example.Controllers
 
         // //GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            return await _customerService.GetCustomers();
+            try
+            {
+                return _customerService.GetCustomers();
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound("Customers list not found");
+            }
         }
 
         // //GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(long id)
+        public ActionResult<Customer> GetCustomer(long id)
         {
-             return await _customerService.GetCustomer(id);
+            try
+            {
+                return _customerService.GetCustomer(id);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound("Customer list not found");
+            }
+            catch (ArgumentException)
+            {
+                return NotFound("Customer with id " + id + " not found");
+            }
         }
 
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(long id, Customer customer)
+        public IActionResult PutCustomer(long id, Customer customer)
         {
-            return await _customerService.PutCustomer(id, customer) ? Ok("Customer with id " + id + " updated") : NotFound();
+            try
+            {
+                _customerService.PutCustomer(id, customer);
+                return Ok("Customer with id " + id + " updated");
+            }
+            catch (ArgumentException)
+            {
+                return NotFound("Customer with id " + id + " not found");
+            }
         }
 
         // // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public ActionResult<Customer> PostCustomer(Customer customer)
         {
-            return await _customerService.PostCustomer(customer) ? Ok("Customer created") : Problem("Invalid customer");
+            try
+            {
+                _customerService.PostCustomer(customer);
+                return Ok("Customer created");
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound("Customer list not found");
+            }
+            catch (NullReferenceException)
+            {
+                return Problem("No fields can be null");
+            }
         }
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(long id)
+        public IActionResult DeleteCustomer(long id)
         {
-            return await _customerService.DeleteCustomer(id) ? Ok("Customer with id " + id + " deleted") : NotFound();
+            try
+            {
+                _customerService.DeleteCustomer(id);
+                return Ok("Customer with id " + id + " deleted");
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound("Customer list not found");
+            }
+            catch (ArgumentException)
+            {
+                return NotFound("Customer with id " + id + " not found");
+            }
         }
     }
 }

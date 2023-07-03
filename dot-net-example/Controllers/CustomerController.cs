@@ -6,11 +6,11 @@ namespace dot_net_example.Controllers
 {
     [Route("api/customers")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
 
-        public CustomersController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
         }
@@ -25,7 +25,7 @@ namespace dot_net_example.Controllers
             }
             catch (InvalidOperationException)
             {
-                return NotFound("Customers list not found");
+                return NotFound("Customers list is empty");
             }
         }
 
@@ -36,10 +36,6 @@ namespace dot_net_example.Controllers
             try
             {
                 return _customerService.GetCustomer(id);
-            }
-            catch (InvalidOperationException)
-            {
-                return NotFound("Customer list not found");
             }
             catch (ArgumentException)
             {
@@ -66,21 +62,15 @@ namespace dot_net_example.Controllers
         // // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Customer> PostCustomer(Customer customer)
+        public ActionResult<Customer> PostCustomer([FromBody] NewCustomerRequest customer)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                _customerService.PostCustomer(customer);
-                return Ok("Customer created");
+                return NotFound("All fields are required");
             }
-            catch (InvalidOperationException)
-            {
-                return NotFound("Customer list not found");
-            }
-            catch (NullReferenceException)
-            {
-                return Problem("No fields can be null");
-            }
+
+            _customerService.PostCustomer(customer);
+            return Ok("Customer created");
         }
 
         // DELETE: api/Customers/5
@@ -91,10 +81,6 @@ namespace dot_net_example.Controllers
             {
                 _customerService.DeleteCustomer(id);
                 return Ok("Customer with id " + id + " deleted");
-            }
-            catch (InvalidOperationException)
-            {
-                return NotFound("Customer list not found");
             }
             catch (ArgumentException)
             {

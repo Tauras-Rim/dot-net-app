@@ -11,7 +11,7 @@ namespace dot_net_example.Services.Interfaces
 
         public ActionResult<Customer> GetCustomer(long id);
 
-        public void PostCustomer(Customer customer);
+        public void PostCustomer(NewCustomerRequest customer);
 
         public void PutCustomer(long id, Customer customer);
     }

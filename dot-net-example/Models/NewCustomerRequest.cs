@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Build.Framework;
+using RequiredAttribute = System.ComponentModel.DataAnnotations.RequiredAttribute;
 
 namespace dot_net_example.Models
 {
-    public class Customer
+    public class NewCustomerRequest
     {
-        public long Id { get; set; }
-
         [Required(ErrorMessage = "Name is required")]
         public string? Name { get; set; }
 

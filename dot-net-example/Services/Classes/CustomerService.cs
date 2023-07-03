@@ -16,11 +16,9 @@ namespace dot_net_example.Services.Classes
 
         public void DeleteCustomer(long id)
         {
-            CheckIfCustomerListExists();
+            CheckIfCustomerExists(id);
 
             var customer = _customerContext.Customers.Find(id);
-
-            CheckIfCustomerExists(customer, id);
 
             _customerContext.Customers.Remove(customer);
             _customerContext.SaveChanges();
@@ -28,11 +26,9 @@ namespace dot_net_example.Services.Classes
 
         public ActionResult<Customer> GetCustomer(long id)
         {
-            CheckIfCustomerListExists();
+            CheckIfCustomerExists(id);
 
             var customer = _customerContext.Customers.Find(id);
-
-            CheckIfCustomerExists(customer, id);
 
             return customer;
         }
@@ -44,22 +40,19 @@ namespace dot_net_example.Services.Classes
             return _customerContext.Customers.ToList(); ;
         }
 
-        public  void PostCustomer(Customer customer)
+        public  void PostCustomer(NewCustomerRequest request)
         {
-            CheckIfCustomerListExists();
-
+            Customer customer = new Customer();
+            customer.Name = request.Name;
+            customer.Email = request.Email;
+            customer.Age = request.Age;
             _customerContext.Customers.Add(customer);
             _customerContext.SaveChanges();
         }
 
         public void PutCustomer(long id, Customer customer)
         {
-            CheckIfCustomerListExists();
-
-            if (id != customer.Id)
-            {
-                throw new ArgumentException("Incorrect customer id");
-            }
+            CheckIfCustomerExists(id);
 
             _customerContext.Entry(customer).State = EntityState.Modified;
 
@@ -68,23 +61,19 @@ namespace dot_net_example.Services.Classes
 
         private void CheckIfCustomerListExists()
         {
-            if (_customerContext.Customers == null)
+            if (!_customerContext.Customers.Any())
             {
-                throw new InvalidOperationException("Customer list does't exist");
+                throw new InvalidOperationException("Customer list is empty");
             }
         }
 
-        private void CheckIfCustomerExists(Customer customer, long id)
+        private bool CheckIfCustomerExists(long id)
         {
-            if (customer == null)
+            if ((_customerContext.Customers.Any(e => e.Id == id)))
             {
-                throw new ArgumentException("Customer with id" + id + " doesn't exist");
+                return true;
             }
-        }
-
-        private bool CustomerExists(long id)
-        {
-            return (_customerContext.Customers?.Any(e => e.Id == id)).GetValueOrDefault();
+            throw new ArgumentException("Customer with id " + id + " not found");
         }
     }
 }

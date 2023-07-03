@@ -19,14 +19,7 @@ namespace dot_net_example.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            try
-            {
-                return _customerService.GetCustomers();
-            }
-            catch (InvalidOperationException)
-            {
-                return NotFound("Customers list is empty");
-            }
+             return _customerService.GetCustomers();
         }
 
         // //GET: api/Customers/5
@@ -62,13 +55,8 @@ namespace dot_net_example.Controllers
         // // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Customer> PostCustomer([FromBody] NewCustomerRequest customer)
+        public ActionResult<Customer> PostCustomer([FromBody] Customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return NotFound("All fields are required");
-            }
-
             _customerService.PostCustomer(customer);
             return Ok("Customer created");
         }

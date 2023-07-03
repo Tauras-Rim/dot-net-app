@@ -35,17 +35,11 @@ namespace dot_net_example.Services.Classes
 
         public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            CheckIfCustomerListExists();
-
-            return _customerContext.Customers.ToList(); ;
+            return _customerContext.Customers.ToList();
         }
 
-        public  void PostCustomer(NewCustomerRequest request)
+        public  void PostCustomer(Customer customer)
         {
-            Customer customer = new Customer();
-            customer.Name = request.Name;
-            customer.Email = request.Email;
-            customer.Age = request.Age;
             _customerContext.Customers.Add(customer);
             _customerContext.SaveChanges();
         }
@@ -57,14 +51,6 @@ namespace dot_net_example.Services.Classes
             _customerContext.Entry(customer).State = EntityState.Modified;
 
             _customerContext.SaveChanges();
-        }
-
-        private void CheckIfCustomerListExists()
-        {
-            if (!_customerContext.Customers.Any())
-            {
-                throw new InvalidOperationException("Customer list is empty");
-            }
         }
 
         private bool CheckIfCustomerExists(long id)

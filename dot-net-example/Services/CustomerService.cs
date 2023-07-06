@@ -7,55 +7,53 @@ namespace dot_net_example.Services.Classes
 {
     public class CustomerService : ICustomerService
     {
-        private readonly CustomerContext _customerContext;
+        private readonly LibraryContext _libraryContext;
 
-        public CustomerService(CustomerContext customerContext)
+        public CustomerService(LibraryContext libraryContext)
         {
-            _customerContext = customerContext;
+            _libraryContext = libraryContext;
         }
 
         public void DeleteCustomer(long id)
         {
             CheckIfCustomerExists(id);
 
-            var customer = _customerContext.Customers.Find(id);
+            var customer = _libraryContext.Customers.Find(id);
 
-            _customerContext.Customers.Remove(customer);
-            _customerContext.SaveChanges();
+            _libraryContext.Customers.Remove(customer);
+            _libraryContext.SaveChanges();
         }
 
         public ActionResult<Customer> GetCustomer(long id)
         {
             CheckIfCustomerExists(id);
 
-            var customer = _customerContext.Customers.Find(id);
-
-            return customer;
+            return _libraryContext.Customers.Find(id);
         }
 
         public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            return _customerContext.Customers.ToList();
+            return _libraryContext.Customers.ToList();
         }
 
         public  void PostCustomer(Customer customer)
         {
-            _customerContext.Customers.Add(customer);
-            _customerContext.SaveChanges();
+            _libraryContext.Customers.Add(customer);
+            _libraryContext.SaveChanges();
         }
 
         public void PutCustomer(long id, Customer customer)
         {
             CheckIfCustomerExists(id);
 
-            _customerContext.Entry(customer).State = EntityState.Modified;
+            _libraryContext.Entry(customer).State = EntityState.Modified;
 
-            _customerContext.SaveChanges();
+            _libraryContext.SaveChanges();
         }
 
         private bool CheckIfCustomerExists(long id)
         {
-            if ((_customerContext.Customers.Any(e => e.Id == id)))
+            if (_libraryContext.Customers.Any(e => e.Id == id))
             {
                 return true;
             }

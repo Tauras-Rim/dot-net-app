@@ -14,5 +14,7 @@ namespace dot_net_example.Models
 
         [Required(ErrorMessage = "Age is required")]
         public int Age { get; set; }
+
+        public List<Book>? Books { get; set; }
     }
 }

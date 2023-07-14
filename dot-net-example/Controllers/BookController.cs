@@ -50,7 +50,7 @@ namespace dot_net_example.Controllers
             }
             catch (ArgumentException)
             {
-                return NotFound("Book with id " + id + " not found");
+                return NotFound();
             }
         }
 

@@ -15,6 +15,6 @@ namespace dot_net_example.Services.Interfaces
 
         public void PutCustomer(long id, Customer customer);
 
-        public bool CheckIfCustomerExists(long id);
+        public void CheckIfCustomerExists(long id);
     }
 }

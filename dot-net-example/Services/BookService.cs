@@ -57,13 +57,10 @@ namespace dot_net_example.Services
             return _libraryContext.Books.Find(id);
         }
 
-        public bool CheckIfBookExists(long id)
+        public void CheckIfBookExists(long id)
         {
-            if (_libraryContext.Books.Any(e => e.Id == id))
-            {
-                return true;
-            }
-            throw new ArgumentException("Book with id " + id + " not found");
+            if (!_libraryContext.Books.Any(e => e.Id == id))
+                throw new ArgumentException("Book with id " + id + " not found");
         }
     }
 }

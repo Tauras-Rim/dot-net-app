@@ -1,4 +1,5 @@
 ﻿using dot_net_example.Models;
+using dot_net_example.Services.Classes;
 using dot_net_example.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,15 +26,22 @@ namespace dot_net_example.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Book> PostCustomer([FromBody] Book book)
+        public ActionResult<Book> PostBook([FromBody] Book book)
         {
-            _bookService.PostBook(book);
-            return Ok("Book created");
+            try
+            {
+                _bookService.PostBook(book);
+                return Ok("Book created");
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest("Customer not found");
+            }
         }
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteCustomer(long id)
+        public IActionResult DeleteBook(long id)
         {
             try
             {
@@ -49,7 +57,7 @@ namespace dot_net_example.Controllers
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutCustomer(long id, Book book)
+        public IActionResult PutBook(long id, Book book)
         {
             try
             {
@@ -64,7 +72,7 @@ namespace dot_net_example.Controllers
 
         // //GET: api/Books/5
         [HttpGet("{id}")]
-        public ActionResult<Book> GetCustomer(long id)
+        public ActionResult<Book> GetBook(long id)
         {
             try
             {

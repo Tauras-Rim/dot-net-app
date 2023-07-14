@@ -42,7 +42,7 @@ namespace dot_net_example.Controllers
             }
             catch (ArgumentException)
             {
-                return NotFound("Customer with id " + id + " not found");
+                return NotFound();
             }
         }
 

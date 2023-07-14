@@ -1,4 +1,5 @@
 ﻿using dot_net_example.Models;
+using dot_net_example.Services.Classes;
 using dot_net_example.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,12 @@ namespace dot_net_example.Services
     public class BookService : IBookService
     {
         private readonly LibraryContext _libraryContext;
+        private readonly ICustomerService _customerService;
 
-        public BookService(LibraryContext libraryContext)
+        public BookService(LibraryContext libraryContext, ICustomerService customerService)
         {
             _libraryContext = libraryContext;
+            _customerService = customerService;
         }
 
         public ActionResult<IEnumerable<Book>> GetBooks()
@@ -21,6 +24,10 @@ namespace dot_net_example.Services
 
         public void PostBook(Book book)
         {
+            if(book.CustomerId != null)
+            {
+                _customerService.CheckIfCustomerExists((long)book.CustomerId);
+            }
             _libraryContext.Books.Add(book);
             _libraryContext.SaveChanges();
         }
@@ -50,7 +57,7 @@ namespace dot_net_example.Services
             return _libraryContext.Books.Find(id);
         }
 
-        private bool CheckIfBookExists(long id)
+        public bool CheckIfBookExists(long id)
         {
             if (_libraryContext.Books.Any(e => e.Id == id))
             {

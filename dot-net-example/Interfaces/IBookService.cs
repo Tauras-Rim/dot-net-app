@@ -14,5 +14,7 @@ namespace dot_net_example.Services.Interfaces
         public void PostBook(Book book);
 
         public void PutBook(long id, Book book);
+
+        public bool CheckIfBookExists(long id);
     }
 }

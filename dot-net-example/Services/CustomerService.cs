@@ -20,6 +20,11 @@ namespace dot_net_example.Services.Classes
 
             var customer = _libraryContext.Customers.Find(id);
 
+            if(_libraryContext.Books.Any(b => b.CustomerId == id))
+            {
+                throw new ArgumentException("Customer has a book");
+            }
+
             _libraryContext.Customers.Remove(customer);
             _libraryContext.SaveChanges();
         }
@@ -51,7 +56,7 @@ namespace dot_net_example.Services.Classes
             _libraryContext.SaveChanges();
         }
 
-        private bool CheckIfCustomerExists(long id)
+        public bool CheckIfCustomerExists(long id)
         {
             if (_libraryContext.Customers.Any(e => e.Id == id))
             {
